@@ -9,7 +9,7 @@ let editItemButtonID = "btnEdit";
 let deleteItemButtonID = "btnDelete";
 
 var itemsListElement = document.getElementById("ListOfItems");
-var addItemDiv = document.getElementById("divAddItem");
+var $addItemDiv = $("#divAddItem");
 var requiredInputClass = "requiredInput";
 let unitTypes = ["gallons", "units"];
 
@@ -35,26 +35,20 @@ itemsListElement.addEventListener('click', (eventObj) => {
     }
     else if(eventObj.target.id === finishEditingButtonID)
     {
+        //eventObj.target.parentElement is an LI
         let LIIndex = getIndexOfLI(eventObj.target.parentElement, itemsListElement);
         itemsList[LIIndex] = constructListObject(eventObj.target.parentElement);
-        console.log(itemsList);
-        console.log(LIIndex);
+
         itemsListElement.replaceChild(constructListItem(itemsList[LIIndex]), itemsListElement.childNodes[LIIndex]);
     }
 });
 
-function setVisibility(element, howVisible)
-{
-    element.style.display = howVisible;
-}
-
 function constructAddItemDialogue()
 {    
-    addItemDiv = document.getElementById("divAddItem");
-    setVisibility(addItemDiv, addItemVisibility_Initial);
+    $addItemDiv.hide();
     //Construct the html elements that will enable us to add an item
     //set the id of the inputs to something we can reference later
-    addItemDiv.innerHTML = constructAddItemDiv();
+    $addItemDiv.html(constructAddItemDiv());
 }
 
 function constructAddItemDiv(itemName = "", itemQuantity = "", notes = "", unit = "")
@@ -86,18 +80,17 @@ function constructUnitsDropdown(unitTypes, unit)
     html += `</select>`
     return html;
 }
-//load the js file and construct the dialogue, but hide it at first
-constructAddItemDialogue();
 
 function SpawnAddItemDialogue()
 {
     //Dont spawn the add item dialogue again if its already been spawned (or is currently spawned)
-    if(addItemDiv.style.display === addItemVisibility_Show)
+    console.log($addItemDiv.is(":visible"));
+    if($addItemDiv.is(":visible"))
     {
         addItemToList();
     }else{
         //If the addItemDiv isnt showing, show it
-        setVisibility(addItemDiv, addItemVisibility_Show);
+        $addItemDiv.show();
     }
 }
 
@@ -109,7 +102,7 @@ function DespawnAddItemDialogue()
 
 function addItemToList()
 {
-    if(hasValidInputFields(addItemDiv)){
+    if(hasValidInputFields($addItemDiv)){
         //create an <li> item and add our text to it
         let item = constructListObject();
         itemsList.push(item);
@@ -122,13 +115,13 @@ function addItemToList()
 //when you edit
 function constructListObject(element = document)
 {
-    console.log(element);
     //Grab the values from the 2 textboxes, itemName and itemQuantity
-    let itemName = element.querySelector(`#${itemNameIdentifier}`).value;
-    let itemQuantity = element.querySelector(`#${itemQuantityIdentifier}`).value;
-    let itemNotes = element.querySelector(`#${notesIdentifier}`).value;
-    let itemUnitsElement = element.querySelector(`#${unitsIdentifier}`);
-    let itemUnits = itemUnitsElement.options[itemUnitsElement.selectedIndex].value;
+    //let itemName = element.querySelector(`#${itemNameIdentifier}`).value;
+    
+    let itemName = $(element).find(`#${itemNameIdentifier}`).val();
+    let itemQuantity = $(element).find(`#${itemQuantityIdentifier}`).val();
+    let itemNotes = $(element).find(`#${notesIdentifier}`).val();
+    let itemUnits = $(element).find(`#${unitsIdentifier}`).val();
     //make the item object and return it
     let item = {name: itemName, quantity: itemQuantity, notes: itemNotes, units: itemUnits};
     return item;
@@ -151,13 +144,12 @@ function constructListItem(itemObject)
 
 //Given an element, search down the element (and its children) to determine if any input fields are blank. 
 //Return true is all required input fields are valid (not blank)
-function hasValidInputFields(element)
+function hasValidInputFields($element)
 {
     //loop through all input fields that have a type of text
-    console.log(element);
     //query all inputs in the element that are empty and have the .requiredInput class
-    let textFields = element.querySelectorAll(`input[type="text"].${requiredInputClass}`);
-    console.log(textFields);
+    let textFields = $element.find(`input[type="text"].${requiredInputClass}`);
+
     let hasValidFields = true;
     for(let i = 0; i < textFields.length; i++)
     {
@@ -177,3 +169,6 @@ function hasValidInputFields(element)
     }
     return hasValidFields;
 }
+
+//load the js file and construct the dialogue, but hide it at first
+constructAddItemDialogue();
