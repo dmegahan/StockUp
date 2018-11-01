@@ -1,4 +1,3 @@
-//________________________ADD ITEM CONSTRUCTION______________________________//
 var addItemDialogueSpawned = false;
 var itemNameIdentifier = "itemName";
 var itemQuantityIdentifier = "itemQuantity";
@@ -8,9 +7,17 @@ let unitsIdentifier = "itemUnits";
 let editItemButtonID = "btnEdit";
 let deleteItemButtonID = "btnDelete";
 
-var itemsListID = "ListOfItems";
-var itemsListElement = document.getElementById(itemsListID);
-var itemsListQuery = `#${itemsListID} li`;
+let divAddItemID = "divAddItem";
+let buttonAddItemID = "btnAdd";
+let divItemsListID = "divItemsList";
+let ulItemsListID = "ulListOfItems";
+let divAddItemInputsID = "divAddItemInputs";
+
+var queryItemsList_LI = `#${ulItemsListID} li`; //get the LI children of the items list with this query
+var queryItemsList = `#${ulItemsListID}`; //get the UL items list with this query
+var queryAddItemDiv = `#${divAddItemID}`;
+var queryAddItemInputsDiv = `#${divAddItemInputsID}`;
+
 var $addItemDiv = $("#divAddItem");
 var requiredInputClass = "requiredInput";
 let unitTypes = ["gallons", "units"];
@@ -19,7 +26,69 @@ let unitTypes = ["gallons", "units"];
 let addItemVisibility_Initial = "none";
 let addItemVisibility_Show = "inherit";
 
-function constructAddItemDiv(itemName = "", itemQuantity = "", notes = "", unit = "")
+window.onload = () => {
+    constructBody();
+}
+
+// CONSTRUCT THE BODY
+/*
+    The body will consist of an "Add an item" button, contained in an addItem div which will also contain our inputs later. 
+    It will also contain <ul>
+*/
+function constructBody()
+{
+    let $body = $('body');
+    $body.append(constructAddItemDiv());
+
+    //delegate the add item dialogue spawner event to the body
+    $body.on('click', `#${buttonAddItemID}`, SpawnAddItemDialogue);
+    $body.append(constructItemsListDiv());
+}
+
+function constructAddItemDiv()
+{
+    let $addItemDiv = $("<div>", {id: divAddItemID});
+    $addItemDiv.append(constructAddItemButton());
+    $addItemDiv.append("<br>");
+    $addItemDiv.append(constructDivAddItemInputs());
+    return $addItemDiv;
+}
+
+function constructAddItemButton()
+{
+    let buttonText = "Add an Item";
+    let $addItemButton = $(`<button id=${buttonAddItemID}>${buttonText}</button>`);
+
+    return $addItemButton;
+}
+
+function constructDivAddItemInputs()
+{
+    let $divAddItemInputs = $("<div>", {id: divAddItemInputsID});
+    $divAddItemInputs.append(constructAddItemInputs());
+
+    return $divAddItemInputs;
+}
+
+//this div contains the UL of items
+function constructItemsListDiv()
+{
+    let $divItemsList = $("<div>", {id: divItemsListID});
+    $divItemsList.append("<p>Your current list of items</p>");
+    $divItemsList.append(constructItemsListUL());
+    return $divItemsList;
+}
+
+//this is making the UL of items
+function constructItemsListUL()
+{
+    let $ulItemsList = $("<ul>", {id: ulItemsListID});
+    return $ulItemsList;
+}
+
+
+//________________________ADD ITEM CONSTRUCTION______________________________//
+function constructAddItemInputs(itemName = "", itemQuantity = "", notes = "", unit = "")
 {
     let addItemInnerHTML = `
     Item Name: <input type="text" name="${itemNameIdentifier}" id="${itemNameIdentifier}" class="${requiredInputClass}" value="${itemName}">
@@ -30,24 +99,6 @@ function constructAddItemDiv(itemName = "", itemQuantity = "", notes = "", unit 
     Notes: <input type="text" name="${notesIdentifier}" id="${notesIdentifier}" value="${notes}"><br>
     `
     return addItemInnerHTML;
-}
-
-function SpawnAddItemDialogue()
-{
-    //Dont spawn the add item dialogue again if its already been spawned (or is currently spawned)
-    if($addItemDiv.is(":visible"))
-    {
-        addItemToList();
-    }else{
-        //If the addItemDiv isnt showing, show it
-        $addItemDiv.show();
-    }
-}
-
-function DespawnAddItemDialogue()
-{
-    //despawn the dialogue, set addItemDialogueSpawned to false
-    addItemDialogueSpawned = false;
 }
 
 function constructUnitsDropdown(unitTypes, unit)
@@ -67,13 +118,33 @@ function constructUnitsDropdown(unitTypes, unit)
     return html;
 }
 
-function constructAddItemDialogue()
-{    
-    $addItemDiv.hide();
-    //Construct the html elements that will enable us to add an item
-    //set the id of the inputs to something we can reference later
-    $addItemDiv.html(constructAddItemDiv());
+function SpawnAddItemDialogue()
+{
+    //Dont spawn the add item dialogue again if its already been spawned (or is currently spawned)
+    // let $addItemDiv = $(queryAddItemDiv);
+    // if($addItemInputsDiv.is(":visible"))
+    // {
+        addItemToList();
+    // }else{
+    //     //If the addItemDiv isnt showing, show it
+    //     $addItemInputsDiv.show();
+    // }
 }
+
+// function DespawnAddItemDialogue()
+// {
+//     //despawn the dialogue, set addItemDialogueSpawned to false
+//     addItemDialogueSpawned = false;
+// }
+
+// function constructAddItemDialogue()
+// {    
+//     let $addItemDiv = $(queryAddItemDiv);
+//     $addItemDiv.hide();
+//     //Construct the html elements that will enable us to add an item
+//     //set the id of the inputs to something we can reference later
+//     $addItemDiv.html(constructAddItemInputs());
+// }
 
 //_______________________________________________________ LIST CONSTRUCTION __________________________________//
 
@@ -91,21 +162,3 @@ function constructListItem(itemObject)
     `;
     return li;
 }
-
-//element is a parameter that determines how to search for our add item elements
-//We want to be able to sometimes search for these add item elements that get created in the actual list
-//when you edit
-function constructListObject(element = document)
-{
-    //Grab the values from the 2 textboxes, itemName and itemQuantity
-    //let itemName = element.querySelector(`#${itemNameIdentifier}`).value;
-    
-    let itemName = $(element).find(`#${itemNameIdentifier}`).val();
-    let itemQuantity = $(element).find(`#${itemQuantityIdentifier}`).val();
-    let itemNotes = $(element).find(`#${notesIdentifier}`).val();
-    let itemUnits = $(element).find(`#${unitsIdentifier}`).val();
-    //make the item object and return it
-    let item = {name: itemName, quantity: itemQuantity, notes: itemNotes, units: itemUnits};
-    return item;
-}
-
