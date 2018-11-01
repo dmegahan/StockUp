@@ -27,7 +27,7 @@ $(itemsListElement).on('click', 'button', (eventObj) => {
         //loop through all list items, get the index if a list item matches exactly
         let LIIndex = getIndexOfLI(eventObj.target.parentElement, itemsListElement);
 
-        console.log("this.index(): " + $itemsList.index(eventObj.target.parentElement));
+        console.log("this.index(): " + $(itemsListQuery).index(eventObj.target.parentElement));
 
         itemsList.splice(LIIndex, 1);
         itemsListElement.removeChild(eventObj.target.parentElement);
