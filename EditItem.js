@@ -6,8 +6,6 @@ function editItem(listObj, li_index)
     //change the list item so that is has inputs instead of text so we can edit
     //when finished editing, convert those inputs back to text 
 
-    console.log(itemsList);
-    console.log(li_index);
     let itemObj = itemsList[li_index];
 
     listObj.childNodes[li_index].innerHTML = constructEditItemDiv(itemObj);

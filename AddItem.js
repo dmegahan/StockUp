@@ -8,7 +8,9 @@ let unitsIdentifier = "itemUnits";
 let editItemButtonID = "btnEdit";
 let deleteItemButtonID = "btnDelete";
 
-var itemsListElement = document.getElementById("ListOfItems");
+var itemsListID = "ListOfItems";
+var itemsListElement = document.getElementById(itemsListID);
+var itemsListQuery = `#${itemsListID} li`;
 var $addItemDiv = $("#divAddItem");
 var requiredInputClass = "requiredInput";
 let unitTypes = ["gallons", "units"];
@@ -18,13 +20,14 @@ let addItemVisibility_Initial = "none";
 let addItemVisibility_Show = "inherit";
 
 
-//event placed on the whole UL item list
-itemsListElement.addEventListener('click', (eventObj) => {
+$(itemsListElement).on('click', 'button', (eventObj) => {
     //if the button was clicked, get the parent (which is the LI, and remove it from itemsList)
     if(eventObj.target.id === deleteItemButtonID)
     {
         //loop through all list items, get the index if a list item matches exactly
         let LIIndex = getIndexOfLI(eventObj.target.parentElement, itemsListElement);
+
+        console.log("this.index(): " + $itemsList.index(eventObj.target.parentElement));
 
         itemsList.splice(LIIndex, 1);
         itemsListElement.removeChild(eventObj.target.parentElement);
@@ -84,7 +87,6 @@ function constructUnitsDropdown(unitTypes, unit)
 function SpawnAddItemDialogue()
 {
     //Dont spawn the add item dialogue again if its already been spawned (or is currently spawned)
-    console.log($addItemDiv.is(":visible"));
     if($addItemDiv.is(":visible"))
     {
         addItemToList();
