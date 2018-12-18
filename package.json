@@ -1,0 +1,22 @@
+{
+  "name": "stockup",
+  "version": "0.1.0",
+  "description": "Stockup is an app for tracking domestic necessities",
+  "main": "app.js",
+  "scripts": {
+    "test": "echo \"Error: no test specified\" && exit 1"
+  },
+  "repository": {
+    "type": "git",
+    "url": "git+https://github.com/dmegahan/StockUp.git"
+  },
+  "author": "",
+  "license": "ISC",
+  "bugs": {
+    "url": "https://github.com/dmegahan/StockUp/issues"
+  },
+  "homepage": "https://github.com/dmegahan/StockUp#readme",
+  "dependencies": {
+    "express": "^4.16.4"
+  }
+}
