@@ -1,5 +1,26 @@
 <body>
-        
+        <div id="divAddItem">
+                <div id="AddItemInputs">
+                        Item Name: <input type="text" name="itemName" id="itemName" class="requiredInput" value="">
+                        <br>
+                        Item Quantity: <input type="text" name="itemQuantity" 
+                                        id="itemQuantity" class="requiredInput" value="">
+                        <select id="itemUnits">
+                                <option value="gallons">gallons</option>
+                                <option value="units">units</option>
+                        </select>
+                        <br>
+                        Notes: <input type="text" name="itemNotes" id="itemNotes" value=""><br>
+                </div>
+                <button id=btnAddItem>Add Item</button><br>
+        </div>    
+         
+        <div id="Items">
+                <p>Your list of items:</p>
+                <ul id="ItemsList">
+
+                </ul>
+        </div>    
 </body>
 
 <!-- <script type="text/javascript" src="jquery-3.3.1.js"></script> -->
