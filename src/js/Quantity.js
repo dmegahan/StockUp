@@ -3,9 +3,9 @@
 */
 class Quantity
 {
-    constructor(quantity, unit)
+    constructor(amount, unit)
     {
-        this.quantity = quantity;
+        this.amount = amount;
         this.unit = unit;
     }
 }

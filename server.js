@@ -4,6 +4,7 @@ var express = require('express');
 var server = express();
 
 server.use(express.static(__dirname + '/src/components'));
+server.use(express.static(__dirname + '/src/js'));
 
 server.get('/', (request, response) => {
     routing.home(request, response);
