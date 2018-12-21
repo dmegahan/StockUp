@@ -1,4 +1,4 @@
-function main() {
+(function main() {
     //keep track of our list of items
     let itemsList = new ItemsList();
 
@@ -35,7 +35,7 @@ function main() {
         }
         
     });
-}
+})();
  
 function getValidityOfInputs()
 {
@@ -52,5 +52,3 @@ function constructItemObject($selector)
 
     return new Item(itemName, new Quantity(itemQuantity, itemUnits), itemNotes);
 }
-
-main();
