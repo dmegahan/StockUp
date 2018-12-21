@@ -33,7 +33,6 @@
             itemsList.replace(liIndex, constructItemObject(itemSelector));
             itemsList.itemIsEditing(liIndex, false);
         }
-        
     });
 })();
  
